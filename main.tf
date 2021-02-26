@@ -1,20 +1,6 @@
-provider "aws" {
-  region = var.aws_region
-}
-
-provider "random" {}
-
-resource "random_pet" "table_name" {}
-
-resource "aws_dynamodb_table" "tfc_example_table" {
-  name = "${var.db_table_name}-${random_pet.table_name.id}"
-
-  read_capacity  = var.db_read_capacity
-  write_capacity = var.db_write_capacity
-  hash_key       = "UUID"
-
-  attribute {
-    name = "UUID"
-    type = "S"
-  }
+module "describe_regions_for_ec2" {
+  source     = "./iam_role"
+  name       = "describe-regions-for-ec2"
+  identifier = "ec2.amazonaws.com"
+  policy     = data.aws_iam_policy_document.allow_describe_regions.json
 }
